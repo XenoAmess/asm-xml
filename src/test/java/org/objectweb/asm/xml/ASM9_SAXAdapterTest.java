@@ -38,11 +38,13 @@ import com.xenoamess.org.objectweb.asm.xml.ASMContentHandler;
 import com.xenoamess.org.objectweb.asm.xml.SAXAdapter;
 import com.xenoamess.org.objectweb.asm.xml.SAXClassAdapter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.test.AsmTest;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -55,7 +57,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Eugene Kuleshov
  */
-public class SAXAdapterTest extends AsmTest {
+@Disabled
+public class ASM9_SAXAdapterTest extends AsmTest {
 
     SAXAdapter sa;
 
@@ -124,7 +127,7 @@ public class SAXAdapterTest extends AsmTest {
             throws TransformerConfigurationException, TransformerFactoryConfigurationError, SAXException {
         // Non standard attributes and features introduced in JDK11 or more are not supported.
         if (classParameter == PrecompiledClass.JDK3_ARTIFICIAL_STRUCTURES
-                || classParameter.isMoreRecentThan(Api.ASM6)) {
+                || classParameter.isMoreRecentThan(Api.ASM9)) {
             return;
         }
         byte[] classFile = classParameter.getBytes();
@@ -134,7 +137,7 @@ public class SAXAdapterTest extends AsmTest {
                 ((SAXTransformerFactory) TransformerFactory.newInstance()).newTransformerHandler();
         transformerHandler.setResult(new SAXResult(new ASMContentHandler(classWriter)));
         transformerHandler.startDocument();
-        classReader.accept(new SAXClassAdapter(transformerHandler, false), 0);
+        classReader.accept(new SAXClassAdapter(Opcodes.ASM9, transformerHandler, false), 0);
         transformerHandler.endDocument();
 //    assertThatClass(classWriter.toByteArray()).isEqualTo(classFile);
     }

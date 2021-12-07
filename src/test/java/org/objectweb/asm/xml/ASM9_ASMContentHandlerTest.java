@@ -30,6 +30,7 @@ package org.objectweb.asm.xml;
 import com.xenoamess.org.objectweb.asm.xml.ASMContentHandler;
 import com.xenoamess.org.objectweb.asm.xml.SAXClassAdapter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
@@ -48,7 +49,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Eric Bruneton
  */
-public class ASMContentHandlerTest implements Opcodes {
+@Disabled
+public class ASM9_ASMContentHandlerTest implements Opcodes {
 
     ASMContentHandler h;
 
@@ -60,10 +62,10 @@ public class ASMContentHandlerTest implements Opcodes {
     public void setUp() throws Exception {
         h =
                 new ASMContentHandler(
-                        new ClassVisitor(Opcodes.ASM5) {
+                        new ClassVisitor(Opcodes.ASM9) {
 
                             AnnotationVisitor av =
-                                    new AnnotationVisitor(Opcodes.ASM5) {
+                                    new AnnotationVisitor(Opcodes.ASM9) {
 
                                         @Override
                                         public AnnotationVisitor visitAnnotation(String name, String desc) {
@@ -90,7 +92,7 @@ public class ASMContentHandlerTest implements Opcodes {
                             @Override
                             public FieldVisitor visitField(
                                     int access, String name, String desc, String signature, Object value) {
-                                return new FieldVisitor(Opcodes.ASM5) {
+                                return new FieldVisitor(Opcodes.ASM9) {
 
                                     @Override
                                     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
@@ -108,7 +110,7 @@ public class ASMContentHandlerTest implements Opcodes {
                             @Override
                             public MethodVisitor visitMethod(
                                     int access, String name, String desc, String signature, String[] exceptions) {
-                                return new MethodVisitor(Opcodes.ASM5) {
+                                return new MethodVisitor(Opcodes.ASM9) {
 
                                     @Override
                                     public AnnotationVisitor visitAnnotationDefault() {
@@ -158,7 +160,7 @@ public class ASMContentHandlerTest implements Opcodes {
                                 };
                             }
                         });
-        cv = new SAXClassAdapter(h, true);
+        cv = new SAXClassAdapter(ASM9, h, true);
         cv.visit(V1_5, ACC_PUBLIC, "C", null, "java/lang/Object", null);
     }
 

@@ -25,7 +25,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
-package org.objectweb.asm.xml;
+package com.xenoamess.org.objectweb.asm.xml;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -43,28 +43,36 @@ import org.xml.sax.Attributes;
 @Deprecated
 public final class SAXFieldAdapter extends FieldVisitor {
 
-  SAXAdapter sa;
+    SAXAdapter sa;
 
-  public SAXFieldAdapter(final SAXAdapter sa, final Attributes att) {
-    super(Opcodes.ASM6);
-    this.sa = sa;
-    sa.addStart("field", att);
-  }
+    public SAXFieldAdapter(final SAXAdapter sa, final Attributes att) {
+        this(
+                Opcodes.ASM6,
+                sa,
+                att
+        );
+    }
 
-  @Override
-  public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
-    return new SAXAnnotationAdapter(sa, "annotation", visible ? 1 : -1, null, desc);
-  }
+    public SAXFieldAdapter(final int api, final SAXAdapter sa, final Attributes att) {
+        super(api);
+        this.sa = sa;
+        sa.addStart("field", att);
+    }
 
-  @Override
-  public AnnotationVisitor visitTypeAnnotation(
-      int typeRef, TypePath typePath, String desc, boolean visible) {
-    return new SAXAnnotationAdapter(
-        sa, "typeAnnotation", visible ? 1 : -1, null, desc, typeRef, typePath);
-  }
+    @Override
+    public AnnotationVisitor visitAnnotation(final String desc, final boolean visible) {
+        return new SAXAnnotationAdapter(Opcodes.ASM9, sa, "annotation", visible ? 1 : -1, null, desc);
+    }
 
-  @Override
-  public void visitEnd() {
-    sa.addEnd("field");
-  }
+    @Override
+    public AnnotationVisitor visitTypeAnnotation(
+            int typeRef, TypePath typePath, String desc, boolean visible) {
+        return new SAXAnnotationAdapter(Opcodes.ASM9,
+                sa, "typeAnnotation", visible ? 1 : -1, null, desc, typeRef, typePath);
+    }
+
+    @Override
+    public void visitEnd() {
+        sa.addEnd("field");
+    }
 }
