@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.xenoamess.asm</groupId>
     <artifactId>asm-xml</artifactId>
-    <version>9.2.1</version>
+    <version>9.7.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <description>asm-xml, a deprecated and then deleted submodule of ow2.asm</description>
@@ -33,20 +33,19 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8
-        </project.reporting.outputEncoding>
-        <java.version>8</java.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!---->
         <!---->
         <!--libraries versions-->
-        <asm.version>9.2</asm.version>
+        <asm.version>9.7</asm.version>
         <!---->
         <!---->
         <!--maven plugins versions-->
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
@@ -67,6 +66,15 @@
     </properties>
 
     <profiles>
+        <profile>
+            <id>maven.compiler.release</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.release>${java.version}</maven.compiler.release>
+            </properties>
+        </profile>
         <profile>
             <id>ossrh</id>
             <!-- GPG mvn clean deploy -P release -Dgpg.passphrase=YourPassphase -->
@@ -158,8 +166,7 @@
                             <configLocation>
                                 ${checkstyle.configdir}/checkstyle.xml
                             </configLocation>
-                            <includeTestSourceDirectory>true
-                            </includeTestSourceDirectory>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
                             <enableRulesSummary>false</enableRulesSummary>
                         </configuration>
                         <dependencies>
@@ -354,13 +361,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>${maven.compiler.source}
-                    </source>
-                    <target>${maven.compiler.target}
-                    </target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <meminitial>128m</meminitial>
                     <maxmem>512m</maxmem>
-                    <fork>true</fork>
                     <compilerVersion>${java.version}</compilerVersion>
                 </configuration>
             </plugin>
@@ -470,8 +474,7 @@
         <repository>
             <id>ossrh</id>
             <name>OSS Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
-            </url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <!--        <repository>-->
         <!--            <id>com.xenoamess</id>-->
